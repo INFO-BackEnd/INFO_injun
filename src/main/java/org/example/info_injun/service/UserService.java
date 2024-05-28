@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.info_injun.dto.request.UserRequestDTO;
 import org.example.info_injun.dto.response.UserResponseDTO;
 import org.example.info_injun.entity.User;
+import org.example.info_injun.exception.UserNotFoundException;
 import org.example.info_injun.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class UserService {
     public UserResponseDTO getUserById(int id){
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()){
-            throw new IllegalArgumentException("user not found with id: " + id);
+            throw new UserNotFoundException("user not found with id: " + id);
         }
 
         return UserResponseDTO.builder()

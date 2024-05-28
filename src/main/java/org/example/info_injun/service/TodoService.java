@@ -6,6 +6,7 @@ import org.example.info_injun.dto.request.TodoUpdateRequestDTO;
 import org.example.info_injun.dto.response.TodoResponseDTO;
 import org.example.info_injun.entity.Todo;
 import org.example.info_injun.entity.User;
+import org.example.info_injun.exception.UserNotFoundException;
 import org.example.info_injun.repository.TodoRepository;
 import org.example.info_injun.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class TodoService {
     public TodoResponseDTO getTodosById(int id){
         Optional<Todo> todoOptional = todoRepository.findById(id);
         if (todoOptional.isEmpty()){
-            throw new IllegalArgumentException("Todo not found with id: " + id);
+            throw new UserNotFoundException("Todo not found with id: " + id);
         }
 
         return TodoResponseDTO.builder()
@@ -57,7 +58,7 @@ public class TodoService {
     public void creatTodo(TodoRequestDTO todoRequestDTO){
         Optional<User> userOptional = userRepository.findById(todoRequestDTO.getUserId());
         if (userOptional.isEmpty()){
-            throw new IllegalArgumentException("user not found with id: " + todoRequestDTO.getUserId());
+            throw new UserNotFoundException("user not found with id: " + todoRequestDTO.getUserId());
         }
 
         Todo todo = Todo.builder()
@@ -70,7 +71,7 @@ public class TodoService {
     public void updateTodo(int id, TodoUpdateRequestDTO todoUpdateRequestDTO){
         Optional<Todo> todoOptional = todoRepository.findById(id);
         if (todoOptional.isEmpty()){
-            throw new IllegalArgumentException("todo not found with id: " + id);
+            throw new UserNotFoundException("todo not found with id: " + id);
         }
 
         Todo todo = todoOptional.get();
