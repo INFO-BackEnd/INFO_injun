@@ -17,6 +17,7 @@ public class UserService {
 
     public List<UserResponseDTO> getAllUsers(){
         List<User> users = userRepository.findAll();
+
         return users.stream().map(user -> UserResponseDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -25,13 +26,13 @@ public class UserService {
 
     public UserResponseDTO getUserById(int id){
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()){
-            return UserResponseDTO.builder()
-                    .id(optionalUser.get().getId())
-                    .name(optionalUser.get().getName()).build();
-        } else{
+        if (optionalUser.isEmpty()){
             throw new IllegalArgumentException("user not found with id: " + id);
         }
+
+        return UserResponseDTO.builder()
+                .id(optionalUser.get().getId())
+                .name(optionalUser.get().getName()).build();
     }
 
     public void creatUser(UserRequestDTO userRequestDTO){

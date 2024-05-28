@@ -24,7 +24,11 @@ public class Todo {
 
     private boolean done;
 
-    public void setDone(boolean done) {
-        this.done = done;
+    public void completeTodo() {
+        this.done = true;
+    }
+
+    public void cancelTodo() {
+        this.done = false;
     }
 }

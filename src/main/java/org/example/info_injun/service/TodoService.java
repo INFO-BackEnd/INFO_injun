@@ -21,6 +21,7 @@ public class TodoService {
 
     public List<TodoResponseDTO> getAllTodos(){
         List<Todo> todos = todoRepository.findAll();
+
         return todos.stream().map(todo -> TodoResponseDTO.builder()
                 .id(todo.getId())
                 .userId(todo.getId())
@@ -31,6 +32,7 @@ public class TodoService {
 
     public List<TodoResponseDTO> getTodosByUserId(int id){
         List<Todo> todos = todoRepository.findByUserId(id);
+
         return todos.stream().map(todo -> TodoResponseDTO.builder()
                 .id(todo.getId())
                 .userId(todo.getId())
@@ -41,37 +43,43 @@ public class TodoService {
 
     public TodoResponseDTO getTodosById(int id){
         Optional<Todo> todoOptional = todoRepository.findById(id);
-        if (todoOptional.isPresent()){
-            return TodoResponseDTO.builder()
-                    .id(todoOptional.get().getId())
-                    .userId(todoOptional.get().getUser().getId())
-                    .content(todoOptional.get().getContent())
-                    .done(todoOptional.get().isDone()).build();
-        } else {
+        if (todoOptional.isEmpty()){
             throw new IllegalArgumentException("Todo not found with id: " + id);
         }
+
+        return TodoResponseDTO.builder()
+                .id(todoOptional.get().getId())
+                .userId(todoOptional.get().getUser().getId())
+                .content(todoOptional.get().getContent())
+                .done(todoOptional.get().isDone()).build();
     }
 
     public void creatTodo(TodoRequestDTO todoRequestDTO){
         Optional<User> userOptional = userRepository.findById(todoRequestDTO.getUserId());
-        if (userOptional.isPresent()){
-            Todo todo = Todo.builder()
-                    .user(userOptional.get())
-                    .content(todoRequestDTO.getContent()).build();
-            todoRepository.save(todo);
-        } else {
+        if (userOptional.isEmpty()){
             throw new IllegalArgumentException("user not found with id: " + todoRequestDTO.getUserId());
         }
+
+        Todo todo = Todo.builder()
+                .user(userOptional.get())
+                .content(todoRequestDTO.getContent()).build();
+
+        todoRepository.save(todo);
     }
 
     public void updateTodo(int id, TodoUpdateRequestDTO todoUpdateRequestDTO){
         Optional<Todo> todoOptional = todoRepository.findById(id);
-        if (todoOptional.isPresent()){
-            Todo todo = todoOptional.get();
-            todo.setDone(todoUpdateRequestDTO.isDone());
-            todoRepository.save(todo);
-        } else {
+        if (todoOptional.isEmpty()){
             throw new IllegalArgumentException("todo not found with id: " + id);
         }
+
+        Todo todo = todoOptional.get();
+        if (todoUpdateRequestDTO.isDone()) {
+            todo.completeTodo();
+        } else {
+            todo.cancelTodo();
+        }
+
+        todoRepository.save(todo);
     }
 }
