@@ -1,4 +1,4 @@
-package org.example.info_injun.entity;
+package org.example.info_injun.domain.user.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

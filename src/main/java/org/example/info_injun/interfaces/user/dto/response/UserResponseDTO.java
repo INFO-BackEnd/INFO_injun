@@ -1,4 +1,4 @@
-package org.example.info_injun.dto.response;
+package org.example.info_injun.interfaces.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TodoResponseDTO {
+public class UserResponseDTO {
     private int id;
-    private int userId;
-    private String content;
-    private boolean done;
+    private String name;
 }

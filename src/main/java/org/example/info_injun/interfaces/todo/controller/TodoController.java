@@ -1,11 +1,10 @@
-package org.example.info_injun.controller;
+package org.example.info_injun.interfaces.todo.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.info_injun.dto.request.TodoRequestDTO;
-import org.example.info_injun.dto.request.TodoUpdateRequestDTO;
-import org.example.info_injun.dto.response.TodoResponseDTO;
-import org.example.info_injun.service.TodoService;
+import org.example.info_injun.domain.todo.service.TodoService;
+import org.example.info_injun.interfaces.todo.dto.request.TodoRequestDTO;
+import org.example.info_injun.interfaces.todo.dto.request.TodoUpdateRequestDTO;
+import org.example.info_injun.interfaces.todo.dto.response.TodoResponseDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

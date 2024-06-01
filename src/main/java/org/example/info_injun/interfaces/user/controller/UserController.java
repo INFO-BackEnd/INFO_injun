@@ -1,10 +1,9 @@
-package org.example.info_injun.controller;
+package org.example.info_injun.interfaces.user.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.info_injun.dto.request.UserRequestDTO;
-import org.example.info_injun.dto.response.UserResponseDTO;
-import org.example.info_injun.service.UserService;
+import org.example.info_injun.domain.user.service.UserService;
+import org.example.info_injun.interfaces.user.dto.request.UserRequestDTO;
+import org.example.info_injun.interfaces.user.dto.response.UserResponseDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

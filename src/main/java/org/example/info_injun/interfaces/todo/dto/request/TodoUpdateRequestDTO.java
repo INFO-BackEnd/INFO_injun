@@ -1,4 +1,4 @@
-package org.example.info_injun.dto.request;
+package org.example.info_injun.interfaces.todo.dto.request;
 
 import lombok.Getter;
 

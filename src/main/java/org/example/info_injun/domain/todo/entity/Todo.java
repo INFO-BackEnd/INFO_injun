@@ -1,10 +1,11 @@
-package org.example.info_injun.entity;
+package org.example.info_injun.domain.todo.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.info_injun.domain.user.entity.User;
 
 @Entity
 @Getter
