@@ -1,14 +1,14 @@
 package org.example.info_injun.domain.todo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.info_injun.domain.todo.entity.Todo;
-import org.example.info_injun.domain.user.entity.User;
-import org.example.info_injun.exception.NotFoundException;
-import org.example.info_injun.infrastructure.repository.JpaTodoRepository;
-import org.example.info_injun.infrastructure.repository.JpaUserRepository;
-import org.example.info_injun.interfaces.todo.dto.request.TodoRequestDTO;
-import org.example.info_injun.interfaces.todo.dto.request.TodoUpdateRequestDTO;
-import org.example.info_injun.interfaces.todo.dto.response.TodoResponseDTO;
+import org.example.info_injun.domain.todo.domain.Todo;
+import org.example.info_injun.domain.todo.exception.TodoNotFoundException;
+import org.example.info_injun.domain.todo.domain.repository.TodoRepository;
+import org.example.info_injun.domain.todo.presentation.dto.request.TodoRequestDTO;
+import org.example.info_injun.domain.todo.presentation.dto.request.TodoUpdateRequestDTO;
+import org.example.info_injun.domain.todo.presentation.dto.response.TodoResponseDTO;
+import org.example.info_injun.domain.user.domain.User;
+import org.example.info_injun.domain.user.domain.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +17,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TodoService {
-    private final JpaTodoRepository jpaTodoRepository;
-    private final JpaUserRepository jpaUserRepository;
+    private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
 
     public List<TodoResponseDTO> getAllTodos(){
-        List<Todo> todos = jpaTodoRepository.findAll();
+        List<Todo> todos = todoRepository.findAll();
 
         return todos.stream().map(todo -> TodoResponseDTO.builder()
                 .id(todo.getId())
@@ -32,7 +32,7 @@ public class TodoService {
     }
 
     public List<TodoResponseDTO> getTodosByUserId(int id){
-        List<Todo> todos = jpaTodoRepository.findByUserId(id);
+        List<Todo> todos = todoRepository.findByUserId(id);
 
         return todos.stream().map(todo -> TodoResponseDTO.builder()
                 .id(todo.getId())
@@ -43,9 +43,9 @@ public class TodoService {
     }
 
     public TodoResponseDTO getTodosById(int id){
-        Optional<Todo> todoOptional = jpaTodoRepository.findById(id);
+        Optional<Todo> todoOptional = todoRepository.findById(id);
         if (todoOptional.isEmpty()){
-            throw new NotFoundException("Todo not found with id: " + id);
+            throw TodoNotFoundException.EXCEPTION;
         }
 
         return TodoResponseDTO.builder()
@@ -56,22 +56,22 @@ public class TodoService {
     }
 
     public void creatTodo(TodoRequestDTO todoRequestDTO){
-        Optional<User> userOptional = jpaUserRepository.findById(todoRequestDTO.getUserId());
+        Optional<User> userOptional = userRepository.findById(todoRequestDTO.getUserId());
         if (userOptional.isEmpty()){
-            throw new NotFoundException("user not found with id: " + todoRequestDTO.getUserId());
+            throw TodoNotFoundException.EXCEPTION;
         }
 
         Todo todo = Todo.builder()
                 .user(userOptional.get())
                 .content(todoRequestDTO.getContent()).build();
 
-        jpaTodoRepository.save(todo);
+        todoRepository.save(todo);
     }
 
     public void updateTodo(int id, TodoUpdateRequestDTO todoUpdateRequestDTO){
-        Optional<Todo> todoOptional = jpaTodoRepository.findById(id);
+        Optional<Todo> todoOptional = todoRepository.findById(id);
         if (todoOptional.isEmpty()){
-            throw new NotFoundException("todo not found with id: " + id);
+            throw TodoNotFoundException.EXCEPTION;
         }
 
         Todo todo = todoOptional.get();
@@ -81,6 +81,6 @@ public class TodoService {
             todo.cancelTodo();
         }
 
-        jpaTodoRepository.save(todo);
+        todoRepository.save(todo);
     }
 }
