@@ -2,8 +2,8 @@ package org.example.info_injun.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.info_injun.domain.user.domain.User;
-import org.example.info_injun.domain.user.exception.UserNotFoundException;
 import org.example.info_injun.domain.user.domain.repository.UserRepository;
+import org.example.info_injun.domain.user.exception.UserNotFoundException;
 import org.example.info_injun.domain.user.presentation.dto.request.UserRequestDTO;
 import org.example.info_injun.domain.user.presentation.dto.response.UserResponseDTO;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,7 @@ public class UserService {
     public List<UserResponseDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
 
-        return users.stream().map(user -> UserResponseDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .build()).toList();
+        return users.stream().map(UserResponseDTO::userResponseDTO).toList();
     }
 
     public UserResponseDTO getUserById(int id) {
@@ -31,9 +28,7 @@ public class UserService {
             throw UserNotFoundException.EXCEPTION;
         }
 
-        return UserResponseDTO.builder()
-                .id(optionalUser.get().getId())
-                .name(optionalUser.get().getName()).build();
+        return UserResponseDTO.userResponseDTO(optionalUser.get());
     }
 
     public void creatUser(UserRequestDTO userRequestDTO) {
